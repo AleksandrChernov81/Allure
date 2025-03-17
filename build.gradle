@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+    id 'io.freefair.lombok' version '8.6' // Актуальная версия Lombok plugin
+    id 'io.qameta.allure' version '2.11.2' // Плагин для Allure отчетов
+}
+
+group 'ru.netology'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 11
+compileJava.options.encoding = 'UTF-8'
+compileTestJava.options.encoding = 'UTF-8'
+
+repositories {
+    mavenCentral()
+
+}
+
+allure {
+    version = '2.27.0' // Актуальная версия Allure
+    useJUnit5 {
+        version = '2.27.0' // Версия Allure для JUnit 5
+    }
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.2' // JUnit 5 API
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2' // JUnit 5 Engine
+    testImplementation 'com.codeborne:selenide:6.19.1'// Selenide для автоматизации тестов
+    testImplementation 'com.github.javafaker:javafaker:1.0.2' // JavaFaker для генерации тестовых данных
+    testImplementation 'io.qameta.allure:allure-selenide:2.27.0' // Allure интеграция с Selenide
+    compileOnly 'org.projectlombok:lombok:1.18.32' // Lombok для генерации boilerplate кода
+    annotationProcessor 'org.projectlombok:lombok:1.18.32' // Аннотационный процессор Lombok
+    testImplementation 'com.codeborne:selenide:6.19.1'
+}
+
+test {
+    useJUnitPlatform() // Используем JUnit 5 для запуска тестов
+    systemProperties = System.properties // Передаем системные свойства в тесты
+
+    // Настройка headless-режима для Selenide
+    systemProperty 'selenide.headless', System.getProperty('selenide.headless', 'true')
+
+    // Настройки для Chrome (отключаем менеджер паролей)
+    systemProperty 'chromeoptions.prefs', System.getProperty('chromeoptions.prefs', 'profile.password_manager_leak_detection=false')
+}
